@@ -19,13 +19,11 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 #cap = cv2.VideoCapture('dados2.mp4') # vídeo em baixa qualidade
 cap = cv2.VideoCapture('dados.avi') # vídeo em alta qualidade
 
-
 while cap.isOpened() :
     ret, frame = cap.read()
 
     # reduzindo ruídos na imagem
     blurred = cv2.GaussianBlur(frame, (5,5), 0)
-
     
     #medianFiltered = cv2.medianBlur(blurred, 5)
 
@@ -44,9 +42,10 @@ while cap.isOpened() :
     # verifica nos contornos encontrados se o mesmo possui area maior q 100px (contorno válido)
     for contour in contours:
         area = cv2.contourArea(contour)
-        if area > 100:
+        if area > 100 and area < 2300:
             contour_list.append(contour)
 
+    cv2.drawContours(frame, contour_list, -1, (0,0,255), 3)
     # itera pela lista de contornos válidos
     for contour in contour_list:
 
@@ -61,7 +60,6 @@ while cap.isOpened() :
         # escreve o valor retornados da função valorDado na imagem
         val = valorDado(roi)
         if(val > 0):
-            cv2.rectangle(frame,(x,y),(x+w,y+h),(200,0,0),2)
             cv2.putText(frame, str(val), (x+w, y+h), font, 1, (0,0,255), thickness=3)
 
     # exibe a imagem final já com os valores dos dados detectados
